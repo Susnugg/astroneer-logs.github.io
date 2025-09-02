@@ -18,7 +18,7 @@
             transition: max-height 0.5s ease-in-out;
         }
         .log-content.open {
-            max-height: 250px; /* A value large enough to show content */
+            max-height: 1000px; /* A value large enough to show all content */
         }
     </style>
 </head>
@@ -61,10 +61,10 @@
         // Data structure for the logs
         const logsData = {
             tab1: [
-                { title: 'Entry 1: RESEARCH', content: 'An unexpected 500 error occurred in the API gateway. The issue was resolved by restarting the service. No data was lost.' },
-                { title: 'Entry 2: PROGRESS', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
-                { title: 'Entry 3: CONCLUSIONS', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
-                { title: 'Entry 4: S.O.S', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
+                { title: 'Entry 1: RESEARCH', content: "My research continues en route to Luubos Prime. This is my first time working with the natal specimens before they've undergone environmental adaptation. All seven Galastropods remain in good health. Nothing substantial to report.\n\nOn a personal note: I question the value of our current mission. Extensive research has already been provided on Galastropoda aptum and I fail to see the added value that exposure to Luubos Prime will bring. EXO's solutions for containment are questionable at best, turning a species with such invasive qualities into house pets.\n\nAdditionally, crewman Nao has taken to spending all his free hours in the nursery, interrupting my work. His insipid cooing and insistence on naming them is irritating. I dread the hours he's not on shift." },
+                { title: 'Entry 2: PROGRESS', content: "Despite my best efforts, Rogal continues to escape from his terrarium in favor of taking up space in my coat pocket. I fear I have spoiled him one too many times with our walks around the ship. The little ones have taken over my lab.\n\nIncreasing personal interaction has resulted in extremely positive results. Much as I hate to admit it, the snails do seem happier and I find myself strangely energized once they've all been fed and sorted. I even caught Usagi singing this morning.\n\nNao will never let me live this down. I will have to settle our bet the next time he's free. His team has been extremely busy charting a course towards the anomaly our scanners picked up. I do hope he finds time to drop by the nursey soon." },
+                { title: 'Entry 3: CONCLUSIONS', content: 'I may have been a bit hasty in my initial assessments regarding the Galastropods. I can understand why EXO Dynamics sought to integrate them into society rather than exterminate them--the temporary physical improvements they provide to their caretakers is an objectively beneficial increase.I have yet to quantify the more permanent positive effects they\'ve had on my productivity and mood. I must admit I am glad for our temporary course diversion from Luubos Prime. I find myself strangely excited and anxious to expose the little ones to that planet. It will inevitably change them. I can only hope for the better.\n\nNao will no doubt laugh at me for this. Whatever he needs must be urgent. I can hear him calling me again.' },
+                { title: 'Entry 4: S.O.S', content: 'This will be my final entry. The Triton is under attack.\nI am the only one left.\nI\'ve sealed the nursery, but it won\'t be long before they find me. Nao called to me earlier...or whatever that thing is pretending to be Nao did. There\'s no way off the ship for me, but I\'ve set the command to jettison the nursery. All that\'s left is to push the button.\n\nIf you\'re reading this, please take care of these little ones. I cannot save the Triton, but maybe I can save them.' },
                 { title: 'Service Health Check', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
                 { title: 'Service Health Check', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
                 { title: 'Service Health Check', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
@@ -107,7 +107,7 @@
                     
                     const contentDiv = document.createElement('div');
                     contentDiv.classList.add('mt-2', 'p-3', 'bg-[#F5F8FC]', 'rounded-xl', 'text-gray-600', 'log-content');
-                    contentDiv.textContent = log.content;
+                    contentDiv.innerHTML = log.content.replace(/\n/g, '<br>');
                     li.appendChild(contentDiv);
                     
                     // Toggle the content visibility on click
