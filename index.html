@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astroneer Logs</title>
+    <title>Dynamic Log Viewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -18,7 +18,7 @@
             transition: max-height 0.5s ease-in-out;
         }
         .log-content.open {
-            max-height: 300px; /* A value large enough to show content */
+            max-height: 250px; /* A value large enough to show content */
         }
     </style>
 </head>
@@ -42,16 +42,16 @@
         <!-- Log Panels Container -->
         <div id="content-panel-container" class="relative min-h-[400px]">
             <!-- Log content for each module. They are now absolutely positioned to overlap. -->
-            <div id="tab1-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div id="tab1-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none max-h-[400px] overflow-y-auto">
                 <ul class="space-y-2"></ul>
             </div>
-            <div id="tab2-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div id="tab2-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none max-h-[400px] overflow-y-auto">
                 <ul class="space-y-2"></ul>
             </div>
-            <div id="tab3-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div id="tab3-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none max-h-[400px] overflow-y-auto">
                 <ul class="space-y-2"></ul>
             </div>
-            <div id="tab4-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div id="tab4-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none max-h-[400px] overflow-y-auto">
                 <ul class="space-y-2"></ul>
             </div>
         </div>
