@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Log Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #E6ECF2;
+        }
+        /* Custom CSS for log content animation */
+        .log-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .log-content.open {
+            max-height: 300px; /* A value large enough to show content */
+        }
+    </style>
+</head>
+<body class="p-8 md:p-12">
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-100">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">System Activity Logs</h1>
+            <p class="text-gray-500 mt-2">Browse categorized logs from different system modules.</p>
+        </header>
+
+        <!-- Main Menu Tabs -->
+        <nav class="flex flex-wrap justify-center space-x-2 md:space-x-4 mb-6">
+            <button class="tab-button w-full sm:w-auto px-6 py-3 font-medium text-sm md:text-base text-gray-700 bg-[#F0F5F9] hover:bg-[#FFD1A6] rounded-xl transition-colors duration-200" data-tab="tab1">Xenobiology Lab</button>
+            <button class="tab-button w-full sm:w-auto px-6 py-3 font-medium text-sm md:text-base text-gray-700 bg-[#F0F5F9] hover:bg-[#FFD1A6] rounded-xl transition-colors duration-200" data-tab="tab2">Logistics Depot</button>
+            <button class="tab-button w-full sm:w-auto px-6 py-3 font-medium text-sm md:text-base text-gray-700 bg-[#F0F5F9] hover:bg-[#FFD1A6] rounded-xl transition-colors duration-200" data-tab="tab3">Sun Room</button>
+            <button class="tab-button w-full sm:w-auto px-6 py-3 font-medium text-sm md:text-base text-gray-700 bg-[#F0F5F9] hover:bg-[#FFD1A6] rounded-xl transition-colors duration-200" data-tab="tab4">Missions</button>
+        </nav>
+
+        <!-- Log Panels Container -->
+        <div id="content-panel-container" class="relative min-h-[400px]">
+            <!-- Log content for each module. They are now absolutely positioned to overlap. -->
+            <div id="tab1-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+                <ul class="space-y-2"></ul>
+            </div>
+            <div id="tab2-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+                <ul class="space-y-2"></ul>
+            </div>
+            <div id="tab3-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+                <ul class="space-y-2"></ul>
+            </div>
+            <div id="tab4-content" class="content-panel absolute top-0 left-0 w-full p-4 bg-gray-50 rounded-lg transition-opacity duration-500 opacity-0 pointer-events-none">
+                <ul class="space-y-2"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure for the logs
+        const logsData = {
+            tab1: [
+                { title: 'API Gateway Failure', content: 'An unexpected 500 error occurred in the API gateway. The issue was resolved by restarting the service. No data was lost.' },
+                { title: 'Service Health Check', content: 'System health check completed successfully at 10:30 AM UTC. All sub-services are operational.' },
+                { title: 'User Login Attempt', content: 'Failed login attempt from IP address 192.168.1.1. The account has been temporarily locked for security.' },
+            ],
+            tab2: [
+                { title: 'Database Connection Error', content: 'Failed to connect to the primary database instance. The system automatically failed over to the secondary replica.' },
+                { title: 'Backup Operation Complete', content: 'Daily database backup to cloud storage finished successfully. The backup file is available at location: /backups/2025-01-01.' },
+                { title: 'System Security Alert', content: 'A potential cross-site scripting (XSS) vulnerability was detected and patched in the user profile module.' }
+            ],
+            tab3: [
+                { title: 'Authentication Service Update', content: 'The authentication service was updated to version 1.2. The new version includes enhanced security features and performance improvements.' },
+                { title: 'Session Expiration Warning', content: 'User session for user_id: 12345 is nearing expiration. A renewal token has been issued.' },
+                { title: 'New User Registered', content: 'A new user account was created. The user has been assigned a default set of permissions.' },
+            ],
+            tab4: [
+                { title: 'Payment Processing Timeout', content: 'A payment request timed out after 30 seconds. The transaction was marked as pending and will be retried automatically.' },
+                { title: 'Billing Cycle Report', content: 'Monthly billing report generated and sent to finance team. The report covers the period from 2024-12-01 to 2024-12-31.' },
+                { title: 'Subscription Status Change', content: 'The subscription for user_id: 67890 was successfully changed from Basic to Premium.' },
+            ],
+        };
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentPanels = document.querySelectorAll('.content-panel');
+
+        // Function to render logs for a given tab
+        function renderLogs(tabId) {
+            const list = document.querySelector(`#${tabId}-content ul`);
+            list.innerHTML = ''; // Clear existing logs
+            const logs = logsData[tabId];
+            if (logs) {
+                logs.forEach(log => {
+                    const li = document.createElement('li');
+                    li.classList.add('p-3', 'bg-white', 'rounded-xl', 'shadow-sm', 'cursor-pointer', 'hover:bg-gray-100', 'transition-colors', 'duration-200');
+                    
+                    const titleDiv = document.createElement('div');
+                    titleDiv.classList.add('font-medium', 'text-gray-800');
+                    titleDiv.textContent = log.title;
+                    li.appendChild(titleDiv);
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.classList.add('mt-2', 'p-3', 'bg-[#F5F8FC]', 'rounded-xl', 'text-gray-600', 'log-content');
+                    contentDiv.textContent = log.content;
+                    li.appendChild(contentDiv);
+                    
+                    // Toggle the content visibility on click
+                    li.addEventListener('click', () => {
+                        contentDiv.classList.toggle('open');
+                    });
+                    
+                    list.appendChild(li);
+                });
+            }
+        }
+
+        // Tab button event listeners
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                const targetPanel = document.getElementById(`${targetTab}-content`);
+
+                // Hide all content panels
+                contentPanels.forEach(panel => {
+                    panel.classList.add('opacity-0', 'pointer-events-none');
+                    panel.classList.remove('opacity-100');
+                });
+
+                // Remove active styling from all buttons
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('bg-[#FFD1A6]', 'font-semibold');
+                    btn.classList.add('bg-[#F0F5F9]');
+                });
+
+                // Show the target panel and add active styling to the button
+                targetPanel.classList.add('opacity-100');
+                targetPanel.classList.remove('opacity-0', 'pointer-events-none');
+                
+                button.classList.remove('bg-[#F0F5F9]');
+                button.classList.add('bg-[#FFD1A6]', 'font-semibold');
+                renderLogs(targetTab);
+            });
+        });
+    </script>
+</body>
+</html>
